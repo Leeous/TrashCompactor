@@ -1,0 +1,28 @@
+@using Sandbox;
+@using Sandbox.UI;
+@inherits PanelComponent
+@namespace Sandbox
+
+<root>
+	
+	<img class="title" src="Textures/Logo.png"/>
+
+	<div class="menu main_menu">
+		<button onclick="@PlayGame">Play</button>
+		<button>Options</button>
+		<button onclick="@ExitGame">Exit</button>
+	</div>
+</root>
+
+@code
+{
+	void PlayGame()
+	{
+		Scene.LoadFromFile("scenes/Game.scene");
+	}
+
+	void ExitGame()
+	{
+		Game.Close();
+	}
+}

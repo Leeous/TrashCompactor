@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="288.19479mm"
+   height="32.003979mm"
+   viewBox="0 0 1089.2402 120.95993"
+   version="1.1"
+   id="svg1"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <pattern
+       xlink:href="#pattern29"
+       preserveAspectRatio="none"
+       id="pattern30"
+       patternTransform="matrix(0.11992636,7.7414497e-4,-0.00243729,0.37756873,373.46611,-13.677766)" />
+    <pattern
+       xlink:href="#pattern19"
+       preserveAspectRatio="none"
+       id="pattern29"
+       patternTransform="matrix(0.19281908,-0.05311122,0.21244489,0.77127632,339.46008,-95.292245)"
+       x="-4"
+       y="-47" />
+    <pattern
+       patternUnits="userSpaceOnUse"
+       width="578.6684"
+       height="894.82402"
+       patternTransform="translate(294.20929,-41.380005)"
+       preserveAspectRatio="xMidYMid"
+       id="pattern19"
+       style="fill:#000000">
+      <rect
+         style="fill-opacity:1;stroke-width:1.3881"
+         id="rect18"
+         width="971.21228"
+         height="107.45906"
+         x="46.531136"
+         y="-80.594292"
+         transform="rotate(60)" />
+    </pattern>
+    <pattern
+       patternUnits="userSpaceOnUse"
+       width="2394.0246"
+       height="579.46275"
+       patternTransform="translate(17.683136,133.30365)"
+       preserveAspectRatio="xMidYMid"
+       id="pattern26"
+       style="fill:#000000">
+      <rect
+         style="fill-opacity:1"
+         id="rect25"
+         width="2394.0247"
+         height="579.46277"
+         x="0"
+         y="0" />
+    </pattern>
+  </defs>
+  <g
+     id="layer1"
+     transform="translate(-16.639738,-336.37041)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:120px;font-family:Poppins;-inkscape-font-specification:'Poppins Ultra-Bold';writing-mode:lr-tb;direction:ltr;fill:#fd9231;fill-opacity:1"
+       x="14.599714"
+       y="425.17041"
+       id="text1"><tspan
+         id="tspan1"
+         x="14.599714"
+         y="425.17041"
+         style="font-size:120px;fill:#fd9231;fill-opacity:1">Trash Compactor</tspan></text>
+    <rect
+       style="display:none;fill:#ffd42a;stroke:none"
+       width="1310.0203"
+       height="1310.0203"
+       x="67.958023"
+       y="-302.02756"
+       id="rect24" />
+    <rect
+       style="display:none;fill:url(#pattern26);stroke:none"
+       width="2394.0247"
+       height="579.46277"
+       x="17.683136"
+       y="133.30365"
+       id="rect26" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:800;font-stretch:normal;font-size:120px;font-family:Poppins;-inkscape-font-specification:'Poppins Ultra-Bold';writing-mode:lr-tb;direction:ltr;fill:url(#pattern30)"
+       x="14.599714"
+       y="425.17041"
+       id="text29"><tspan
+         id="tspan29"
+         x="14.599714"
+         y="425.17041"
+         style="font-size:120px;fill:url(#pattern30)">Trash Compactor</tspan></text>
+  </g>
+</svg>
