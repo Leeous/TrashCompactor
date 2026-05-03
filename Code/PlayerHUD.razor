@@ -1,0 +1,42 @@
+@using Sandbox;
+@using Sandbox.UI;
+@inherits PanelComponent
+@namespace Sandbox
+
+<root>
+	<div>
+		<h1>Trash Compactor</h1>
+	</div>
+	<div class="player-health">
+		<label>Health</label>
+		<div class="player-health-bar">
+			<div class="player-health-bar-progress" style="width: @( GetHealthPercent() )%"></div>
+		</div>
+	</div>
+</root>
+
+@code
+{
+	private PlayerStats _playerStats;
+
+	protected override void OnUpdate()
+	{
+		if ( _playerStats == null )
+		{
+			var playerObj = Scene.GetAllObjects( true ).FirstOrDefault( x => x.Tags.Has( "player" ) );
+			_playerStats = playerObj?.Components.Get<PlayerStats>();
+		}
+	}
+
+	private float GetHealthPercent()
+	{
+		if ( _playerStats == null ) return 0f;
+		
+		return _playerStats.CurrentHealth;
+	}
+	
+	/// <summary>
+	/// the hash determines if the system should be rebuilt. If it changes, it will be rebuilt
+	/// </summary>
+	protected override int BuildHash() => System.HashCode.Combine( _playerStats );
+}
