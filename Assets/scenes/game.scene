@@ -22,7 +22,7 @@
           "__guid": "fdd990b4-59b8-4b59-a079-f3cca4925983",
           "__enabled": true,
           "Flags": 0,
-          "Center": "-3.99993134,0,508.000214",
+          "Center": "-3.99993134,0,4.00027466",
           "ColliderFlags": 0,
           "Elasticity": null,
           "Friction": null,
@@ -38,7 +38,7 @@
           "OnTriggerEnter": null,
           "OnTriggerExit": null,
           "RollingResistance": null,
-          "Scale": "185.999863,370,1360.63916",
+          "Scale": "185.999863,370,352.639099",
           "Static": true,
           "Surface": null,
           "SurfaceVelocity": "65.0799942,0,0"
@@ -49,7 +49,7 @@
           "__enabled": true,
           "Flags": 0,
           "disabled": false,
-          "Force": 4000,
+          "Force": 2000,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
@@ -1618,7 +1618,7 @@
       "__version": 2,
       "Flags": 0,
       "Name": "Player Controller",
-      "Position": "-160,0,79.6167374",
+      "Position": "224,0,40",
       "Rotation": "0,0,0,1",
       "Scale": "1,1,1",
       "Tags": "player",
@@ -1819,6 +1819,18 @@
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
           "OnComponentUpdate": null
+        },
+        {
+          "__type": "PhysicsDamageHandler",
+          "__guid": "2e4f161d-4a55-4d07-9c28-5e47d42981e0",
+          "__enabled": true,
+          "Flags": 0,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null
         }
       ],
       "Children": [
@@ -1886,7 +1898,7 @@
           ],
           "Children": [
             {
-              "__guid": "9c5a6b12-e303-453c-9efb-96376e97e878",
+              "__guid": "ea3c9fd6-0031-4ceb-b715-838f59d10feb",
               "__version": 2,
               "Flags": 0,
               "Name": "Clothing - eyebrows_styled",
@@ -1903,7 +1915,7 @@
               "Components": [
                 {
                   "__type": "Sandbox.SkinnedModelRenderer",
-                  "__guid": "98e05a59-3059-4071-9332-0f3a9128c8de",
+                  "__guid": "106032a2-edc7-46e0-834e-69b6e6ca570a",
                   "__enabled": true,
                   "Flags": 0,
                   "AnimationGraph": null,
@@ -1955,7 +1967,7 @@
               "Children": []
             },
             {
-              "__guid": "681199da-a560-4b4a-8237-3e6c70dd69c1",
+              "__guid": "436f57c9-b0d6-4d34-a90a-5a7a3e9e7379",
               "__version": 2,
               "Flags": 0,
               "Name": "Clothing - medium_beard",
@@ -1972,7 +1984,7 @@
               "Components": [
                 {
                   "__type": "Sandbox.SkinnedModelRenderer",
-                  "__guid": "58cfebe8-853e-477e-9251-311c6593ba67",
+                  "__guid": "1938c377-648d-47ec-ba24-bfa7a2b1d86b",
                   "__enabled": true,
                   "Flags": 0,
                   "AnimationGraph": null,
@@ -2024,7 +2036,7 @@
               "Children": []
             },
             {
-              "__guid": "090e1f1b-3f26-459d-ba8d-ff22208be515",
+              "__guid": "69720499-d10d-41e9-a230-e677d396fa0b",
               "__version": 2,
               "Flags": 0,
               "Name": "Clothing - baseball_cap_brown",
@@ -2041,7 +2053,7 @@
               "Components": [
                 {
                   "__type": "Sandbox.SkinnedModelRenderer",
-                  "__guid": "d680aa0d-d04c-440e-86af-a1a692e0fe52",
+                  "__guid": "2b65f9d5-fd44-43c8-b977-6d07b7d1db14",
                   "__enabled": true,
                   "Flags": 0,
                   "AnimationGraph": null,
@@ -2093,7 +2105,7 @@
               "Children": []
             },
             {
-              "__guid": "faed4037-d5a4-4a59-bfad-f143f0301839",
+              "__guid": "be787f0b-13cc-4ec6-8cc0-47cc188b6b3c",
               "__version": 2,
               "Flags": 0,
               "Name": "Clothing - hoodie",
@@ -2110,7 +2122,7 @@
               "Components": [
                 {
                   "__type": "Sandbox.SkinnedModelRenderer",
-                  "__guid": "4bf9e2ef-980d-4cfc-9f70-ce430ecb5106",
+                  "__guid": "bf46ffd2-06fe-4231-8831-91d58e35c41a",
                   "__enabled": true,
                   "Flags": 0,
                   "AnimationGraph": null,
@@ -2162,7 +2174,7 @@
               "Children": []
             },
             {
-              "__guid": "da4c660a-534d-4ca6-a78e-cc033cca5728",
+              "__guid": "e5708823-8277-425d-b2e7-82e60dea5d87",
               "__version": 2,
               "Flags": 0,
               "Name": "Clothing - blue_sneakers",
@@ -2179,7 +2191,7 @@
               "Components": [
                 {
                   "__type": "Sandbox.SkinnedModelRenderer",
-                  "__guid": "d3a403d6-7981-4998-aeb4-c9d9adfeae44",
+                  "__guid": "4a1de5bd-c38c-4c33-acad-90a87fb24c1f",
                   "__enabled": true,
                   "Flags": 0,
                   "AnimationGraph": null,
@@ -2231,7 +2243,7 @@
               "Children": []
             },
             {
-              "__guid": "7fa57201-4b48-422a-ade2-55aa1e9f0b69",
+              "__guid": "600152ff-b9f9-448b-8e71-f38f22229ba9",
               "__version": 2,
               "Flags": 0,
               "Name": "Clothing - flannel_boxers",
@@ -2248,7 +2260,7 @@
               "Components": [
                 {
                   "__type": "Sandbox.SkinnedModelRenderer",
-                  "__guid": "0f82a6d0-fa88-4fad-8d52-8d117e052694",
+                  "__guid": "938b4533-5ecd-42d2-af16-0e46e0af4cda",
                   "__enabled": true,
                   "Flags": 0,
                   "AnimationGraph": null,
@@ -2326,7 +2338,7 @@
               "Elasticity": null,
               "End": "0,0,36",
               "Friction": 0,
-              "IsTrigger": false,
+              "IsTrigger": true,
               "OnComponentDestroy": null,
               "OnComponentDisabled": null,
               "OnComponentEnabled": null,
@@ -2685,7 +2697,7 @@
       "__guid": "5532efa7-dda3-4e0a-bf11-5890e6bacd3e",
       "__version": 2,
       "Flags": 0,
-      "Name": "Object",
+      "Name": "Prop Spawner",
       "Position": "536,-23.8721237,0.000267028809",
       "Rotation": "0,0,0,1",
       "Scale": "1,1,1",
@@ -2710,14 +2722,6 @@
           "OnComponentUpdate": null,
           "SpawnInterval": 10,
           "TrashPrefabs": [
-            {
-              "_type": "gameobject",
-              "go": "ba7f7b85-1dd6-4b52-b21c-23d48da39085"
-            },
-            {
-              "_type": "gameobject",
-              "go": "fc7bd5b4-619c-48f0-8f20-bd97bb082f5d"
-            },
             {
               "_type": "gameobject",
               "go": "84ddd705-21e0-4ec6-be19-fa8f1113fe5f"
@@ -3249,14 +3253,14 @@
       "Sandbox.MovieMaker.MovieRecorderSystem": {
         "DisableClientRecording": false
       },
-      "Sandbox.Clutter.ClutterGridSystem": {
-        "Storage": {
-          "$blob": "056ecbcb-1076-46f6-8dbe-49ea614e8871"
-        }
-      },
       "Sandbox.SelectionSetsSystem": {
         "Data": {
           "SelectionSets": []
+        }
+      },
+      "Sandbox.Clutter.ClutterGridSystem": {
+        "Storage": {
+          "$blob": "056ecbcb-1076-46f6-8dbe-49ea614e8871"
         }
       }
     }
