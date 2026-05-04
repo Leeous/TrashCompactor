@@ -4,12 +4,12 @@ using Sandbox;
 
 public sealed class PropGenerator : Component
 {
-	[Property] public List<GameObject> TrashPrefabs { get; set; } = new();
+	[Property] public List<Model> TrashPrefabs { get; set; } = new();
 	[Property] public float SpawnInterval { get; set; } = 2.0f;
 
 	private TimeSince _lastSpawn;
 	
-	protected override void OnUpdate()
+	protected override void OnFixedUpdate()
 	{
 		if ( _lastSpawn > SpawnInterval )
 		{
@@ -26,14 +26,25 @@ public sealed class PropGenerator : Component
 		
 		var randomIndex = Game.Random.Int( 0, TrashPrefabs.Count - 1 );
 		var prefab = TrashPrefabs[randomIndex];
-
-		if ( prefab != null )
+		
+		var newTrashGameObject = new GameObject();
+		
+		// Add Prop component
+		newTrashGameObject.AddComponent<Prop>();
+		
+		// Set model on Prop Component
+		newTrashGameObject.GetComponent<Prop>().Model = prefab;
+		
+		// Decrease min speed needed for impact damage
+		newTrashGameObject.GetComponent<Rigidbody>().MinImpactDamageSpeed = 100;
+		
+		// Add Prop tag (so PlayerPropGrab will interact with it)
+		newTrashGameObject.Tags.Add(  "prop" );
+		newTrashGameObject.Clone( WorldPosition, WorldRotation );
+		
+		if ( newTrashGameObject.Components.TryGet<Rigidbody>( out var rb ) )
 		{
-			var newTrash = prefab.Clone( WorldPosition, WorldRotation );
-			if ( newTrash.Components.TryGet <Rigidbody>( out var rb ) )
-			{
-				rb.Velocity = Vector3.Random * 50f;
-			}
+			// rb.Velocity = Vector3.Random * 50f; We don't need this right now
 		}
 	}
 }
