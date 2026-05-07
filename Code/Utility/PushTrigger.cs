@@ -41,7 +41,7 @@ public sealed class PushTrigger : Component, Component.ITriggerListener
 		if ( !_activeObjects.Contains( other.GameObject ) )
 		{
 			_activeObjects.Add( other.GameObject );
-			Log.Info( $"Compactor grabbed: {other.GameObject.Name}" );
+			// Log.Info( $"Compactor grabbed: {other.GameObject.Name}" );
 		}
 	}
 
@@ -50,7 +50,7 @@ public sealed class PushTrigger : Component, Component.ITriggerListener
 		if ( _activeObjects.Contains( other.GameObject ) )
 		{
 			_activeObjects.Remove( other.GameObject );
-			Log.Info( $"Compactor released: {other.GameObject.Name}" );
+			// Log.Info( $"Compactor released: {other.GameObject.Name}" );
 		}
 	}
 }

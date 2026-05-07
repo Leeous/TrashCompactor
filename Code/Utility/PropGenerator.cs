@@ -32,6 +32,9 @@ public sealed class PropGenerator : Component
 		// Add Prop component
 		newTrashGameObject.AddComponent<Prop>();
 		
+		// Set prop position to component's position
+		newTrashGameObject.GetComponent<Prop>().LocalPosition = this.LocalPosition;
+		
 		// Set model on Prop Component
 		newTrashGameObject.GetComponent<Prop>().Model = prefab;
 		
@@ -40,7 +43,6 @@ public sealed class PropGenerator : Component
 		
 		// Add Prop tag (so PlayerPropGrab will interact with it)
 		newTrashGameObject.Tags.Add(  "prop" );
-		newTrashGameObject.Clone( WorldPosition, WorldRotation );
 		
 		if ( newTrashGameObject.Components.TryGet<Rigidbody>( out var rb ) )
 		{

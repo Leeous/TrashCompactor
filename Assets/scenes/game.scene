@@ -48,7 +48,6 @@
           "__guid": "2fd68539-5b56-4a31-961f-4fec8bd3c99c",
           "__enabled": true,
           "Flags": 0,
-          "disabled": false,
           "Force": 2000,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
@@ -1618,7 +1617,7 @@
       "__version": 2,
       "Flags": 0,
       "Name": "Player Controller",
-      "Position": "224,0,40",
+      "Position": "128,0,72",
       "Rotation": "0,0,0,1",
       "Scale": "1,1,1",
       "Tags": "player",
@@ -1650,7 +1649,7 @@
           "BodyHeight": 72,
           "BodyMass": 500,
           "BodyRadius": 16,
-          "BrakePower": 1,
+          "BrakePower": 0.628752,
           "CameraOffset": "256,0,12",
           "ColliderObject": {
             "_type": "gameobject",
@@ -1677,7 +1676,7 @@
           "OnComponentStart": null,
           "OnComponentUpdate": null,
           "PitchClamp": 90,
-          "ReachLength": 130,
+          "ReachLength": 10,
           "Renderer": {
             "_type": "component",
             "component_id": "5bb36183-4a1c-4782-94ef-baf803c372fa",
@@ -1688,9 +1687,9 @@
           "RotationAngleLimit": 45,
           "RotationSpeed": 1,
           "RunByDefault": false,
-          "RunSpeed": 320,
+          "RunSpeed": 120,
           "ShowColliderComponents": true,
-          "ShowRigidbodyComponent": false,
+          "ShowRigidbodyComponent": true,
           "ThirdPerson": false,
           "ToggleCameraModeButton": "",
           "UseAnimatorControls": true,
@@ -1699,13 +1698,13 @@
           "UseFovFromPreferences": true,
           "UseInputControls": true,
           "UseLookControls": true,
-          "WalkSpeed": 110
+          "WalkSpeed": 70
         },
         {
           "__type": "Sandbox.Rigidbody",
           "__guid": "ce374661-2ac5-4e38-a24c-9e9791bbb4d2",
           "__enabled": true,
-          "Flags": 1,
+          "Flags": 0,
           "AngularDamping": 1,
           "EnableImpactDamage": true,
           "EnhancedCcd": false,
@@ -1807,11 +1806,11 @@
           "WorkshopItems": []
         },
         {
-          "__type": "PlayerStats",
-          "__guid": "514d0b19-936c-4acb-8a4f-2c0a21555352",
+          "__type": "Player",
+          "__guid": "22490731-9f0a-47bd-b896-7d38069ab69d",
           "__enabled": true,
           "Flags": 0,
-          "CurrentHealth": 0,
+          "Health": 100,
           "MaxHealth": 100,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
@@ -1821,10 +1820,41 @@
           "OnComponentUpdate": null
         },
         {
-          "__type": "PhysicsDamageHandler",
-          "__guid": "2e4f161d-4a55-4d07-9c28-5e47d42981e0",
+          "__type": "PlayerPropGrab",
+          "__guid": "4dedc6cd-92a1-482c-8fa5-a3a499e3ee17",
           "__enabled": true,
           "Flags": 0,
+          "GrabDistance": 100,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "ThrowForce": 800
+        },
+        {
+          "__type": "PlayerStats",
+          "__guid": "b220d998-a881-4efb-b295-e57ec8a39c7c",
+          "__enabled": true,
+          "Flags": 0,
+          "CurrentHealth": 0,
+          "EnableLogging": false,
+          "hurtSound": "sounds/hurt4.sound",
+          "MaxHealth": 100,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null
+        },
+        {
+          "__type": "Sandbox.PhysicsDamageHandler",
+          "__guid": "45da5178-bb54-4fe4-9e9f-de7610873f1d",
+          "__enabled": true,
+          "Flags": 0,
+          "EnableLogging": false,
           "OnComponentDestroy": null,
           "OnComponentDisabled": null,
           "OnComponentEnabled": null,
@@ -1898,7 +1928,7 @@
           ],
           "Children": [
             {
-              "__guid": "ea3c9fd6-0031-4ceb-b715-838f59d10feb",
+              "__guid": "982e2f35-32e6-4ca0-b418-6edd745c087c",
               "__version": 2,
               "Flags": 0,
               "Name": "Clothing - eyebrows_styled",
@@ -1915,7 +1945,7 @@
               "Components": [
                 {
                   "__type": "Sandbox.SkinnedModelRenderer",
-                  "__guid": "106032a2-edc7-46e0-834e-69b6e6ca570a",
+                  "__guid": "7e486855-0434-47f3-af8a-75fcf6acc23f",
                   "__enabled": true,
                   "Flags": 0,
                   "AnimationGraph": null,
@@ -1967,7 +1997,7 @@
               "Children": []
             },
             {
-              "__guid": "436f57c9-b0d6-4d34-a90a-5a7a3e9e7379",
+              "__guid": "e6aeee55-d3a0-45b5-9484-5c836e2484bb",
               "__version": 2,
               "Flags": 0,
               "Name": "Clothing - medium_beard",
@@ -1984,7 +2014,7 @@
               "Components": [
                 {
                   "__type": "Sandbox.SkinnedModelRenderer",
-                  "__guid": "1938c377-648d-47ec-ba24-bfa7a2b1d86b",
+                  "__guid": "cea388cd-1ccd-450b-9a4e-490b960f73b4",
                   "__enabled": true,
                   "Flags": 0,
                   "AnimationGraph": null,
@@ -2036,7 +2066,7 @@
               "Children": []
             },
             {
-              "__guid": "69720499-d10d-41e9-a230-e677d396fa0b",
+              "__guid": "adee8fb9-afc3-4250-98db-feabd4ee33c7",
               "__version": 2,
               "Flags": 0,
               "Name": "Clothing - baseball_cap_brown",
@@ -2053,7 +2083,7 @@
               "Components": [
                 {
                   "__type": "Sandbox.SkinnedModelRenderer",
-                  "__guid": "2b65f9d5-fd44-43c8-b977-6d07b7d1db14",
+                  "__guid": "b3991907-0eb4-4f07-913a-6c20167e7b20",
                   "__enabled": true,
                   "Flags": 0,
                   "AnimationGraph": null,
@@ -2105,7 +2135,7 @@
               "Children": []
             },
             {
-              "__guid": "be787f0b-13cc-4ec6-8cc0-47cc188b6b3c",
+              "__guid": "c626a2f1-eb2a-4d36-a08f-b06dcf1f93c5",
               "__version": 2,
               "Flags": 0,
               "Name": "Clothing - hoodie",
@@ -2122,7 +2152,7 @@
               "Components": [
                 {
                   "__type": "Sandbox.SkinnedModelRenderer",
-                  "__guid": "bf46ffd2-06fe-4231-8831-91d58e35c41a",
+                  "__guid": "8a8df0cc-1129-4a7b-9e12-71f47634bc47",
                   "__enabled": true,
                   "Flags": 0,
                   "AnimationGraph": null,
@@ -2174,7 +2204,7 @@
               "Children": []
             },
             {
-              "__guid": "e5708823-8277-425d-b2e7-82e60dea5d87",
+              "__guid": "295fc82a-6216-4369-9c64-a1cdc3931e2d",
               "__version": 2,
               "Flags": 0,
               "Name": "Clothing - blue_sneakers",
@@ -2191,7 +2221,7 @@
               "Components": [
                 {
                   "__type": "Sandbox.SkinnedModelRenderer",
-                  "__guid": "4a1de5bd-c38c-4c33-acad-90a87fb24c1f",
+                  "__guid": "2789d23f-486a-4791-a423-1547101479b1",
                   "__enabled": true,
                   "Flags": 0,
                   "AnimationGraph": null,
@@ -2243,7 +2273,7 @@
               "Children": []
             },
             {
-              "__guid": "600152ff-b9f9-448b-8e71-f38f22229ba9",
+              "__guid": "169e6528-da14-4ad9-9e12-d5e1b9c32c94",
               "__version": 2,
               "Flags": 0,
               "Name": "Clothing - flannel_boxers",
@@ -2260,7 +2290,7 @@
               "Components": [
                 {
                   "__type": "Sandbox.SkinnedModelRenderer",
-                  "__guid": "938b4533-5ecd-42d2-af16-0e46e0af4cda",
+                  "__guid": "2db5f6d3-e216-4c79-8400-a70e546db289",
                   "__enabled": true,
                   "Flags": 0,
                   "AnimationGraph": null,
@@ -2429,21 +2459,6 @@
               "Viewport": "0,0,1,1",
               "ZFar": 10000,
               "ZNear": 10
-            },
-            {
-              "__type": "PlayerPropGrab",
-              "__guid": "85091285-9928-4b04-8da3-2c0b5a16c73c",
-              "__enabled": true,
-              "Flags": 0,
-              "GrabDistance": 100,
-              "OnComponentDestroy": null,
-              "OnComponentDisabled": null,
-              "OnComponentEnabled": null,
-              "OnComponentFixedUpdate": null,
-              "OnComponentStart": null,
-              "OnComponentUpdate": null,
-              "PushTrigger": null,
-              "ThrowForce": 300
             }
           ],
           "Children": [
@@ -2697,7 +2712,7 @@
       "__guid": "5532efa7-dda3-4e0a-bf11-5890e6bacd3e",
       "__version": 2,
       "Flags": 0,
-      "Name": "Prop Spawner",
+      "Name": "Trash Spawner",
       "Position": "536,-23.8721237,0.000267028809",
       "Rotation": "0,0,0,1",
       "Scale": "1,1,1",
@@ -2711,7 +2726,7 @@
       "Components": [
         {
           "__type": "PropGenerator",
-          "__guid": "7d822ba2-73db-45ec-b837-60063532bea7",
+          "__guid": "3bdbcb14-ae8e-4074-b519-7d29926f9f25",
           "__enabled": true,
           "Flags": 0,
           "OnComponentDestroy": null,
@@ -2720,12 +2735,9 @@
           "OnComponentFixedUpdate": null,
           "OnComponentStart": null,
           "OnComponentUpdate": null,
-          "SpawnInterval": 10,
+          "SpawnInterval": 2,
           "TrashPrefabs": [
-            {
-              "_type": "gameobject",
-              "go": "84ddd705-21e0-4ec6-be19-fa8f1113fe5f"
-            }
+            "models/citizen_props/concreteroaddivider01.vmdl"
           ]
         }
       ],
@@ -3228,6 +3240,150 @@
           ]
         }
       ]
+    },
+    {
+      "__guid": "7cec87e0-8578-4655-8d0b-628fe095bb6f",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "beachball",
+      "Position": "119.999985,-47.9999924,0.591272712",
+      "Rotation": "0,0,0,1",
+      "Scale": "1,1,1",
+      "Tags": "",
+      "Enabled": true,
+      "NetworkMode": 2,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 1,
+      "Components": [
+        {
+          "__type": "Sandbox.Prop",
+          "__guid": "e94c5e2e-d33d-43c8-99dc-05da5e31608b",
+          "__enabled": true,
+          "Flags": 0,
+          "BodyGroups": 18446744073709551615,
+          "Health": 0,
+          "IsStatic": false,
+          "MaterialGroup": null,
+          "Model": "models/citizen_props/beachball.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "OnPropBreak": null,
+          "OnPropTakeDamage": null,
+          "StartAsleep": false,
+          "Tint": "1,1,1,1"
+        },
+        {
+          "__type": "Sandbox.ModelRenderer",
+          "__guid": "a2f13246-033a-4d84-94b4-c2f24feb80e7",
+          "__enabled": true,
+          "Flags": 0,
+          "BodyGroups": 18446744073709551615,
+          "CreateAttachments": false,
+          "LodOverride": null,
+          "MaterialGroup": null,
+          "MaterialOverride": null,
+          "Materials": null,
+          "Model": "models/citizen_props/beachball.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "RenderOptions": {
+            "GameLayer": true,
+            "OverlayLayer": false,
+            "BloomLayer": false,
+            "AfterUILayer": false
+          },
+          "RenderType": "On",
+          "Tint": "1,1,1,1"
+        },
+        {
+          "__type": "Sandbox.ModelCollider",
+          "__guid": "3aefb375-32b0-408c-82e8-ec6690d4136c",
+          "__enabled": true,
+          "Flags": 0,
+          "ColliderFlags": 0,
+          "Elasticity": null,
+          "Friction": null,
+          "IsTrigger": false,
+          "Model": "models/citizen_props/beachball.vmdl",
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "OnObjectTriggerEnter": null,
+          "OnObjectTriggerExit": null,
+          "OnTriggerEnter": null,
+          "OnTriggerExit": null,
+          "RollingResistance": null,
+          "Static": false,
+          "Surface": null,
+          "SurfaceVelocity": "0,60,0"
+        },
+        {
+          "__type": "Sandbox.Rigidbody",
+          "__guid": "1a2aff10-d313-47c2-8371-819ee9408ec6",
+          "__enabled": true,
+          "Flags": 0,
+          "AngularDamping": 0,
+          "EnableImpactDamage": true,
+          "EnhancedCcd": false,
+          "Gravity": true,
+          "GravityScale": 1,
+          "ImpactDamage": 0,
+          "LinearDamping": 0,
+          "Locking": {
+            "X": false,
+            "Y": false,
+            "Z": false,
+            "Pitch": false,
+            "Yaw": false,
+            "Roll": false
+          },
+          "MassCenterOverride": "0,0,0",
+          "MassOverride": 0,
+          "MinImpactDamageSpeed": 500,
+          "MotionEnabled": true,
+          "OnComponentDestroy": null,
+          "OnComponentDisabled": null,
+          "OnComponentEnabled": null,
+          "OnComponentFixedUpdate": null,
+          "OnComponentStart": null,
+          "OnComponentUpdate": null,
+          "OverrideMassCenter": false,
+          "RigidbodyFlags": 0,
+          "StartAsleep": false
+        }
+      ],
+      "Children": []
+    },
+    {
+      "__guid": "fc31a9ce-f2a0-41cc-866c-6f3411f11d87",
+      "__version": 2,
+      "Flags": 0,
+      "Name": "player spawn point",
+      "Position": "-48.8967743,-212.398758,0.000503540039",
+      "Rotation": "0,0,0,1",
+      "Scale": "1,1,1",
+      "Tags": "",
+      "Enabled": true,
+      "NetworkMode": 2,
+      "NetworkFlags": 0,
+      "NetworkOrphaned": 0,
+      "NetworkTransmit": true,
+      "OwnerTransfer": 1,
+      "Components": [],
+      "Children": []
     }
   ],
   "SceneProperties": {
@@ -3253,14 +3409,14 @@
       "Sandbox.MovieMaker.MovieRecorderSystem": {
         "DisableClientRecording": false
       },
-      "Sandbox.SelectionSetsSystem": {
-        "Data": {
-          "SelectionSets": []
-        }
-      },
       "Sandbox.Clutter.ClutterGridSystem": {
         "Storage": {
           "$blob": "056ecbcb-1076-46f6-8dbe-49ea614e8871"
+        }
+      },
+      "Sandbox.SelectionSetsSystem": {
+        "Data": {
+          "SelectionSets": []
         }
       }
     }
@@ -3268,6 +3424,8 @@
   "ResourceVersion": 3,
   "Title": null,
   "Description": null,
-  "__references": [],
+  "__references": [
+    "ozmium.hurt4#164265"
+  ],
   "__version": 3
 }
