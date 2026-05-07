@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Timers;
 using Sandbox;
@@ -6,6 +7,7 @@ public sealed class PropGenerator : Component
 {
 	[Property] public List<Model> TrashPrefabs { get; set; } = new();
 	[Property] public float SpawnInterval { get; set; } = 2.0f;
+	[Property] public float PropImpactDamageSpeed { get; set; } = 100;
 
 	private TimeSince _lastSpawn;
 	
@@ -39,7 +41,7 @@ public sealed class PropGenerator : Component
 		newTrashGameObject.GetComponent<Prop>().Model = prefab;
 		
 		// Decrease min speed needed for impact damage
-		newTrashGameObject.GetComponent<Rigidbody>().MinImpactDamageSpeed = 100;
+		newTrashGameObject.GetComponent<Rigidbody>().MinImpactDamageSpeed = PropImpactDamageSpeed;
 		
 		// Add Prop tag (so PlayerPropGrab will interact with it)
 		newTrashGameObject.Tags.Add(  "prop" );
