@@ -1,4 +1,4 @@
-## Trash Compacter
+### Trash Compacter
 <sub>A gamemode for <a href="https://sbox.game/" target="_blank">S&Box</a></sub>
 ---
 
