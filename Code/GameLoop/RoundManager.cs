@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using Sandbox;
 using Sandbox.Diagnostics;
 
@@ -10,7 +9,7 @@ public enum RoundState
     MatchEnd
 }
 
-public class RoundManager
+public sealed class RoundManager : Component
 {
     public RoundState State { get; private set; }
     public int CurrentRound { get; private set; }
@@ -19,10 +18,16 @@ public class RoundManager
     
     public float PostRoundDuration { get; set; } = 8f;
 
+    /// <summary>
+    /// The number of players that are currently *alive*, does not include spectators.
+    /// </summary>
+    public int ActivePlayers => Game.ActiveScene.GetAllComponents<Player>().Count();
+
     private TimeSince stateTimer;
 
-    public void Update()
+    protected override void OnUpdate()
     {
+        Log.Info($"There are {ActivePlayers}.");
         switch ( State )
         {
             case RoundState.WaitingForPlayers:
