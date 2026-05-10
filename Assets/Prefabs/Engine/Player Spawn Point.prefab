@@ -1,9 +1,9 @@
 {
   "RootObject": {
-    "__guid": "f6430708-2b64-4ca0-be50-5293b5315a36",
+    "__guid": "0d7de428-27d3-4696-aafa-84faf21fdd6b",
     "__version": 2,
     "Flags": 0,
-    "Name": "player spawn point",
+    "Name": "Player Spawn Point",
     "Position": "0,0,0",
     "Rotation": "0,0,0,1",
     "Scale": "1,1,1",
@@ -15,33 +15,12 @@
     "NetworkTransmit": true,
     "OwnerTransfer": 1,
     "Components": [],
-    "Children": [],
-    "__properties": {
-      "NetworkInterpolation": true,
-      "TimeScale": 1,
-      "WantsSystemScene": true,
-      "Metadata": {},
-      "NavMesh": {
-        "Enabled": false,
-        "IncludeStaticBodies": true,
-        "IncludeKeyframedBodies": true,
-        "EditorAutoUpdate": false,
-        "AgentHeight": 64,
-        "AgentRadius": 16,
-        "AgentStepSize": 18,
-        "AgentMaxSlope": 40,
-        "ExcludedBodies": "",
-        "IncludedBodies": "",
-        "DeferGeneration": false,
-        "CustomBounds": false
-      }
-    },
-    "__variables": []
+    "Children": []
   },
   "ResourceVersion": 2,
-  "ShowInMenu": true,
+  "ShowInMenu": false,
   "MenuPath": null,
-  "MenuIcon": "person_2",
+  "MenuIcon": null,
   "DontBreakAsTemplate": false,
   "__references": [],
   "__version": 2
