@@ -9,8 +9,26 @@ public enum RoundState
     MatchEnd
 }
 
-public sealed class RoundManager : Component
+public sealed class RoundManager : GameObjectSystem<RoundManager>, ISceneStartup, IScenePhysicsEvents
 {
+    public RoundManager ( Scene scene ) : base( scene )
+    {
+        
+    }
+
+	void ISceneStartup.OnHostInitialize()
+	{
+		Networking.CreateLobby( new Sandbox.Network.LobbyConfig()
+            {
+                Privacy = Sandbox.Network.LobbyPrivacy.Public,
+                MaxPlayers = 16,
+                Name = "Trash Compactor",
+                DestroyWhenHostLeaves = true
+            } 
+        );
+	}
+
+    [Property] public GameObject PlayerPrefab { get; set;}
     public RoundState State { get; private set; }
     public int CurrentRound { get; private set; }
     public int MaxRounds { get; set; } = 8;
@@ -25,26 +43,26 @@ public sealed class RoundManager : Component
 
     private TimeSince stateTimer;
 
-    protected override void OnUpdate()
-    {
-        Log.Info($"There are {ActivePlayers}.");
-        switch ( State )
-        {
-            case RoundState.WaitingForPlayers:
-                if ( EnoughPlayers() ) 
-                    StartRound();
-                break;
+    // protected override void OnUpdate()
+    // {
+    //     Log.Info($"There are {ActivePlayers}.");
+    //     switch ( State )
+    //     {
+    //         case RoundState.WaitingForPlayers:
+    //             if ( EnoughPlayers() ) 
+    //                 StartRound();
+    //             break;
 
-            case RoundState.Active:
-                if ( RoundShouldEnd() ) 
-                    EndRound();
-                break;
+    //         case RoundState.Active:
+    //             if ( RoundShouldEnd() ) 
+    //                 EndRound();
+    //             break;
 
-            case RoundState.RoundOver:
-                if ( stateTimer > PostRoundDuration ) NextRound();
-                break;
-        }
-    }
+    //         case RoundState.RoundOver:
+    //             if ( stateTimer > PostRoundDuration ) NextRound();
+    //             break;
+    //     }
+    // }
 
     private void StartRound()
     {
@@ -144,6 +162,8 @@ public sealed class RoundManager : Component
     /// </summary>
     public void SpawnPlayers()
     {
+        Assert.NotNull( PlayerPrefab );
         
+        // PlayerPrefab.Clone( GetComponent<SpawnPoint>().WorldPosition );
     }
 }
