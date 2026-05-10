@@ -1,9 +1,293 @@
 using Sandbox;
+using Sandbox.Movement;
+using System.Threading;
 
-public sealed class Player : Component
+public sealed class Player : Component, Component.IDamageable, PlayerController.IEvents, Global.IPlayerEvents, IKillSource
 {
+	private static Player LocalPlayer { get; set; }
+	public static Player FindLocalPplayer() => LocalPlayer;
+	
+	[RequireComponent] public PlayerController Controller { get; set; }
+	[Property] public GameObject Body { get; set; }
+	[Property, Range( 0, 100 ), Sync( SyncFlags.FromHost)] public float Health { get; set; } = 100;
+	[Property, Range( 0, 100 ), Sync( SyncFlags.FromHost)] public float MaxHealth { get; set; } = 100;
+	[Property, Range( 0, 100 ), Sync( SyncFlags.FromHost)] public float Armor { get; set; } = 0;
+	[Property, Range( 0, 100 ), Sync( SyncFlags.FromHost)] public float MaxArmor { get; set; } = 100;
+
+	[Sync( SyncFlags.FromHost )] public PlayerData PlayerData { get; set; }
+
+	public bool IsLocalPlayer => !IsProxy;
+	public Guid PlayerId => PlayerData.IsValid() ? PlayerData.PlayerId : Guid.Empty;
+	public long SteamId => PlayerData.IsValid() ? PlayerData.SteamId : 0;
+	public string DisplayName => PlayerData.IsValid() ? PlayerData.DisplayName : "Unknown";
+
+	private SoundHandle _dmgSound;
+
+	// IKillSource
+	string IKillSource.DisplayName => DisplayName;
+	long IKillSource.SteamId => SteamId;
+	void IKillSource.OnKill( GameObject victim )
+	{
+		PlayerData.Kills++;
+		PlayerData.AddStat( victim?.GetComponent<Player>().IsValid() ?? false ? "kills" : "kills.npc" );
+	}
+
+	
+
 	protected override void OnUpdate()
 	{
 
 	}
+
+		/// <summary>
+	/// Calculates the launch velocity for a ragdoll based on the damage source.
+	/// For explosions, uses the direction from the blast origin to this NPC.
+	/// Otherwise, falls back to the attacker's physical velocity.
+	/// </summary>
+	Vector3 GetDeathLaunchVelocity( in DamageInfo damage )
+	{
+		if ( damage.Tags.Contains( DamageTags.Explosion ) && damage.Origin != Vector3.Zero )
+		{
+
+			var dist = (WorldPosition - damage.Origin).Length;
+			var strength = MathX.Remap( dist, 0, 512, 1024, 2048, true );
+
+			var dir = (WorldPosition - damage.Origin).Normal;
+			dir += Vector3.Up * 1.0f;
+			dir = dir.Normal;
+
+			return dir * strength;
+		}
+
+		return 0;
+	}
+
+		public void OnDamage( in DamageInfo dmg )
+	{
+		if ( Health < 1 ) return;
+		if ( !PlayerData.IsValid() ) return;
+		// if ( PlayerData.IsGodMode ) return;
+
+		//
+		// Ignore impact damage from the world, for now
+		//
+		if ( dmg.Tags.Contains( "impact" ) )
+		{
+			// Was this fall damage? If so, we can bail out here
+			if ( Controller.Velocity.Dot( Vector3.Down ) > 10 )
+				return;
+
+			// We were hit by some flying object, or flew into a wall, 
+			// so lets take that damage.
+		}
+
+		// Fire pre-damage event — listeners can modify damage or cancel
+		var damageEvent = new PlayerDamageEvent { Player = this, DamageInfo = dmg, Damage = dmg.Damage };
+		Local.IPlayerEvents.PostToGameObject( GameObject, x => x.OnDamaging( damageEvent ) );
+		Global.IPlayerEvents.Post( x => x.OnPlayerDamaging( damageEvent ) );
+
+		if ( damageEvent.Cancelled )
+			return;
+
+		var damage = damageEvent.Damage;
+		if ( dmg.Tags.Contains( DamageTags.Headshot ) )
+			damage *= 2;
+
+		if ( Armor > 0 )
+		{
+			float remainingDamage = damage - Armor;
+			Armor = Math.Max( 0, Armor - damage );
+			damage = Math.Max( 0, remainingDamage );
+		}
+
+		Health -= damage;
+
+		NotifyOnDamage( new PlayerDamageParams()
+		{
+			Damage = damage,
+			Attacker = dmg.Attacker,
+			Weapon = dmg.Weapon,
+			Tags = dmg.Tags,
+			Position = dmg.Position,
+			Origin = dmg.Origin,
+		} );
+
+		// We didn't die
+		if ( Health >= 1 ) return;
+
+		RoundManager.Current.OnDeath( this, dmg );
+
+		Health = 0;
+		Kill( dmg );
+	}
+
+		[Rpc.Broadcast( NetFlags.HostOnly | NetFlags.Reliable )]
+	private void NotifyOnDamage( PlayerDamageParams args )
+	{
+		Local.IPlayerEvents.PostToGameObject( GameObject, x => x.OnDamage( args ) );
+		Global.IPlayerEvents.Post( x => x.OnPlayerDamage( this, args ) );
+
+		if ( IsLocalPlayer )
+		{
+			_dmgSound?.Stop();
+
+			if ( args.Tags.Contains( DamageTags.Shock ) )
+			{
+				_dmgSound = Sound.Play( "damage_taken_shock" );
+			}
+			else
+			{
+				_dmgSound = Sound.Play( "damage_taken_shot" );
+			}
+		}
+	}
+
+		void Kill( in DamageInfo d )
+	{
+		//
+		// Play the flatline sound on the owner
+		//
+		if ( IsLocalPlayer )
+		{
+			// Flatline();
+		}
+
+		//
+		// Let everyone know about the death
+		//
+
+		// NotifyDeath( new PlayerDiedParams() { Attacker = d.Attacker } );
+
+		// var inventory = GetComponent<PlayerInventory>();
+		// if ( inventory.IsValid() )
+		// {
+		// 	inventory.SwitchWeapon( null );
+		// }
+
+		CreateRagdoll( GetDeathLaunchVelocity( d ), d.Origin );
+
+		//
+		// Ghost and say goodbye to the player
+		//
+		PlayerData?.MarkForRespawn();
+		Ghost();
+		GameObject.Destroy();
+	}
+
+	[Rpc.Broadcast( NetFlags.HostOnly | NetFlags.Reliable )]
+	void CreateRagdoll( Vector3 velocity, Vector3 origin )
+	{
+		if ( !Controller.Renderer.IsValid() )
+			return;
+
+		var go = new GameObject( true, "Ragdoll" );
+		go.Tags.Add( "ragdoll" );
+		go.WorldTransform = WorldTransform;
+
+		var mainBody = go.Components.Create<SkinnedModelRenderer>();
+		mainBody.CopyFrom( Controller.Renderer );
+		mainBody.UseAnimGraph = false;
+
+		// copy the clothes
+		foreach ( var clothing in Controller.Renderer.GameObject.Children.Where( x => x.Tags.Has( "clothing" ) ).SelectMany( x => x.Components.GetAll<SkinnedModelRenderer>() ) )
+		{
+			if ( !clothing.IsValid() ) continue;
+
+			var newClothing = new GameObject( true, clothing.GameObject.Name );
+			newClothing.Parent = go;
+
+			var item = newClothing.Components.Create<SkinnedModelRenderer>();
+			item.CopyFrom( clothing );
+			item.BoneMergeTarget = mainBody;
+		}
+
+		var physics = go.Components.Create<ModelPhysics>();
+		physics.Model = mainBody.Model;
+		physics.Renderer = mainBody;
+		physics.CopyBonesFrom( Controller.Renderer, true );
+
+		ApplyRagdollForce( physics, velocity, origin );
+		
+		// var corpse = go.AddComponent<DeathCameraTarget>();
+		// corpse.Connection = Network.Owner;
+		// corpse.Created = DateTime.Now;
+
+		CopyBoneScalesToRagdoll( go );
+	}
+
+	async void ApplyRagdollForce( ModelPhysics physics, Vector3 force, Vector3 origin )
+	{
+		await GameTask.Delay( 10 );
+
+		if ( !physics.IsValid() ) return;
+		if ( force.Length < 1 ) return;
+
+		foreach ( var body in physics.Bodies )
+		{
+			var rb = body.Component;
+			if ( !rb.IsValid() ) continue;
+			rb.ApplyImpulse( Vector3.Direction( origin, rb.WorldPosition ) * force.Length * rb.Mass );
+		}
+	}
+
+	void CreateRagdollAndGhost()
+	{
+		var go = new GameObject( false, "Observer" );
+		// go.Components.Create<PlayerObserver>();
+		go.NetworkSpawn( Network.Owner );
+	}
+
+		/// <summary>
+	/// Try to inherit transforms from the player onto its new ragdoll
+	/// </summary>
+	/// <param name="ragdoll"></param>
+	private void CopyBoneScalesToRagdoll( GameObject ragdoll )
+	{
+		// we are only interested in the bones of the player, not anything that may be attached to it.
+		var playerRenderer = Body.GetComponent<SkinnedModelRenderer>();
+		var bones = playerRenderer.Model.Bones;
+
+		var ragdollRenderer = ragdoll.GetComponent<SkinnedModelRenderer>();
+		ragdollRenderer.CreateBoneObjects = true;
+
+		var ragdollObjects = ragdoll.GetAllObjects( true ).ToLookup( x => x.Name );
+
+		foreach ( var bone in bones.AllBones )
+		{
+			var boneName = bone.Name;
+
+			if ( !ragdollObjects.Contains( boneName ) )
+				continue;
+
+			var boneObject = playerRenderer.GetBoneObject( boneName );
+			if ( !boneObject.IsValid() )
+			{
+				continue;
+			}
+
+			var boneOnRagdoll = ragdollObjects[boneName].FirstOrDefault();
+
+			if ( boneOnRagdoll.IsValid() && boneObject.WorldScale != Vector3.One )
+			{
+				boneOnRagdoll.Flags = boneOnRagdoll.Flags.WithFlag( GameObjectFlags.ProceduralBone, true );
+				boneOnRagdoll.WorldScale = boneObject.WorldScale;
+
+				var z = boneOnRagdoll.Parent;
+				z.Flags = z.Flags.WithFlag( GameObjectFlags.ProceduralBone, true );
+				z.WorldScale = boneObject.WorldScale;
+			}
+		}
+	}
+
+	[Rpc.Owner( NetFlags.HostOnly )]
+	private void Flatline()
+	{
+		Sound.Play( "sounds/flatline.sound" );
+	}
+
+	private void Ghost()
+	{
+		CreateRagdollAndGhost();
+	}
+	
 }

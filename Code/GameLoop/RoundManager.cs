@@ -1,3 +1,4 @@
+using System.Threading.Channels;
 using Sandbox;
 using Sandbox.Diagnostics;
 
@@ -9,7 +10,7 @@ public enum RoundState
     MatchEnd
 }
 
-public sealed class RoundManager : GameObjectSystem<RoundManager>, ISceneStartup, IScenePhysicsEvents
+public sealed class RoundManager : GameObjectSystem<RoundManager>, Component.INetworkListener, ISceneStartup, IScenePhysicsEvents
 {
     public RoundManager ( Scene scene ) : base( scene )
     {
@@ -18,15 +19,69 @@ public sealed class RoundManager : GameObjectSystem<RoundManager>, ISceneStartup
 
 	void ISceneStartup.OnHostInitialize()
 	{
-		Networking.CreateLobby( new Sandbox.Network.LobbyConfig()
-            {
-                Privacy = Sandbox.Network.LobbyPrivacy.Public,
-                MaxPlayers = 16,
-                Name = "Trash Compactor",
-                DestroyWhenHostLeaves = true
-            } 
-        );
+        if ( !Networking.IsActive )
+        {
+            Networking.CreateLobby( new Sandbox.Network.LobbyConfig()
+                {
+                    Privacy = Sandbox.Network.LobbyPrivacy.Public,
+                    MaxPlayers = 16,
+                    Name = "Trash Compactor",
+                    DestroyWhenHostLeaves = true
+                } 
+            );    
+        }
 	}
+
+	void Component.INetworkListener.OnActive( Connection channel )
+	{
+		channel.CanSpawnObjects = false;
+        var playerData = CreatePlayerInfo( channel );
+
+        SpawnPlayer( playerData );
+	}
+
+    private PlayerData CreatePlayerInfo ( Connection channel )
+    {
+        var existingPlayerInfo = PlayerData.For( channel );
+        if ( existingPlayerInfo.IsValid() )
+            return existingPlayerInfo;
+
+        var go = new GameObject( true, $"PlayerInfo - {channel.DisplayName}");
+        var data = go.AddComponent<PlayerData>();
+        data.SteamId = (long)channel.SteamId;
+        data.PlayerId = channel.Id;
+        data.DisplayName = channel.DisplayName;
+
+        go.NetworkSpawn( null );
+        go.Network.SetOwnerTransfer( OwnerTransfer.Fixed );
+
+        return data;
+    }
+
+    /// <summary>
+    /// Spawns player based on their player data 
+    /// </summary>
+    /// <param name="playerData"></param>
+    public void SpawnPlayer( PlayerData playerData )
+    {
+        Assert.NotNull( playerData, "PlayerData is null");
+        Assert.True( Networking.IsHost, $"Client tried to SpawnPlayer: {playerData.DisplayName}");
+
+        if ( Scene.GetAll<Player>().Any( x => x.Network.Owner?.Id == playerData.PlayerId ));
+
+        var startLocation = FindSpawnLocation().WithScale( 1 );
+
+        // Fire pre-respawn event - listeners can modify spawn startLocation
+        var respawnEvent = new PlayerRespawnEvent { PlayerData = playerData, SpawnLocation = startLocation };
+        Global.IPlayerEvents.Post ( x => x.OnPlayerRespawning( respawnEvent ));
+        startLocation = respawnEvent.SpawnLocation;
+
+        // Spawn this object and make the client the owner
+        var playerGo = GameObject.Clone( "prefabs/player.prefab", new CloneConfig { Name = playerData.DisplayName, StartEnabled = false, Transform = startLocation } );
+
+        var player = playerGo.Components.Get<Player>( true );
+        player.PlayerData = playerData;
+    }
 
     [Property] public GameObject PlayerPrefab { get; set;}
     public RoundState State { get; private set; }
@@ -70,7 +125,7 @@ public sealed class RoundManager : GameObjectSystem<RoundManager>, ISceneStartup
         stateTimer = 0;
         AssignRandomRoles();
         ResetPlayersForRound();
-        SpawnPlayers();
+        // SpawnPlayers();
     }
 
     private void EndRound()
@@ -104,6 +159,18 @@ public sealed class RoundManager : GameObjectSystem<RoundManager>, ISceneStartup
             return true;
 
         return false;
+    }
+
+    Transform FindSpawnLocation()
+    {
+        var spawnPoints = Scene.GetAllComponents<SpawnPoint>().ToArray();
+
+        if (spawnPoints.Length == 0)
+        {
+            return Transform.Zero;
+        }
+
+        return Random.Shared.FromArray( spawnPoints ). Transform.World;
     }
 
     /// <summary>
@@ -160,10 +227,62 @@ public sealed class RoundManager : GameObjectSystem<RoundManager>, ISceneStartup
     /// <summary>
     /// Takes all current players in the lobby, assigns roles, and spawns them in-game.
     /// </summary>
-    public void SpawnPlayers()
+    public void SpawnPlayers( PlayerData playerData )
     {
+        Log.Info("Spawning players..");
         Assert.NotNull( PlayerPrefab );
-        
-        // PlayerPrefab.Clone( GetComponent<SpawnPoint>().WorldPosition );
+        Assert.True( Networking.IsHost, $"Client tried to SpawnPlayer: { playerData.DisplayName }");
+
+        // if (Scene.GetAll<Player>().Any( x => x.OnPlayerRespawning( respawn event )));
     }
+
+    	/// <summary>
+	/// Called on the host when a played is killed
+	/// </summary>
+	public void OnDeath( Player player, DamageInfo dmg )
+	{
+		Assert.True( Networking.IsHost );
+
+		Assert.True( player.IsValid(), "Player invalid" );
+		Assert.True( player.PlayerData.IsValid(), $"{player.GameObject.Name}'s PlayerData invalid" );
+
+		// var source = dmg.Attacker?.GetComponentInParent<IKillSource>( true );
+		// if ( source == null ) return;
+
+		// var isSuicide = source is Player p && p == player;
+
+		// if ( !isSuicide )
+		// 	source.OnKill( player.GameObject );
+
+		// // Fire kill event on the killer if they're a player
+		// if ( !isSuicide && source is Player killer )
+		// {
+		// 	var killEvent = new PlayerKillEvent { Player = killer, Victim = player.GameObject, DamageInfo = dmg };
+		// 	Local.IPlayerEvents.PostToGameObject( killer.GameObject, x => x.OnKill( killEvent ) );
+		// 	Global.IPlayerEvents.Post( x => x.OnPlayerKill( killEvent ) );
+		// }
+
+		player.PlayerData.Deaths++;
+
+	// 	var weapon = dmg.Weapon;
+	// 	var w = weapon.IsValid() ? weapon.GetComponentInChildren<IKillIcon>() : null;
+	// 	var damageTags = dmg.Tags.ToString() + ( isSuicide ? " suicide" : "" );
+	// 	var attackerTags = isSuicide ? "" : source.Tags;
+	// 	var attackerName = isSuicide ? null : source.DisplayName;
+	// 	var attackerSteamId = isSuicide ? 0L : source.SteamId;
+	// 	Scene.RunEvent<Feed>( x => x.NotifyKill( player.DisplayName, attackerName, attackerSteamId, damageTags, attackerTags, "", w?.DisplayIcon ) );
+
+	// 	if ( string.IsNullOrEmpty( attackerName ) )
+	// 	{
+	// 		SendMessage( $"{player.DisplayName} died (tags: {dmg.Tags})" );
+	// 	}
+	// 	else if ( weapon.IsValid() )
+	// 	{
+	// 		SendMessage( $"{attackerName} killed {(isSuicide ? "self" : player.DisplayName)} with {weapon.Name} (tags: {dmg.Tags})" );
+	// 	}
+	// 	else
+	// 	{
+	// 		SendMessage( $"{attackerName} killed {(isSuicide ? "self" : player.DisplayName)} (tags: {dmg.Tags})" );
+	// 	}
+	}
 }
