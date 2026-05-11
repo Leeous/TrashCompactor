@@ -29,13 +29,16 @@ MainMenu
       color: #fff;
       font-size: 5vh;
       padding: .5vw;
-      min-width: 10vw;
+      width: 25vw;
       background-color: #fd9231;
       cursor: pointer;
       pointer-events: all;
+      text-transform: uppercase;
+      font-weight: bold;
+      letter-spacing: .1rem;
+      transition: ease-in-out .5s all;
         &:hover {
           background-color: #ffa554;
-          transform: scale(1.1);
         }
       
         &:not(:first-child) {

@@ -7,18 +7,48 @@
 	
 	<img class="title" src="Textures/Logo.png"/>
 
-	<div class="menu main_menu">
-		<button onclick="@PlayGame">Play</button>
-		<button>Options</button>
-		<button onclick="@ExitGame">Exit</button>
-	</div>
+	@if (CurrentMenu == MenuState.Main)
+	{
+		<div class="menu main_menu">
+			<button onclick="@PlayGame">Play</button>
+			<button onclick="@ShowOptions">Options</button>
+			<button onclick="@ExitGame">Exit</button>
+		</div>
+	}
+	else if (CurrentMenu == MenuState.Options)
+	{
+		<div class="menu options_menu">
+			<h2>Options</h2>
+			<!-- Add your options here, e.g., sliders, toggles -->
+			<button onclick="@ShowMainMenu">Back</button>
+		</div>
+	}
+
 </root>
 
 @code
 {
+	public enum MenuState
+	{
+		Main,
+		Options
+	}
+
+	public MenuState CurrentMenu { get; set; } = MenuState.Main;
+
 	void PlayGame()
 	{
 		Scene.LoadFromFile("scenes/Game.scene");
+	}
+
+	void ShowOptions()
+	{
+		CurrentMenu = MenuState.Options;
+	}
+
+	void ShowMainMenu()
+	{
+		CurrentMenu = MenuState.Main;
 	}
 
 	void ExitGame()
